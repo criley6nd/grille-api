@@ -1,6 +1,7 @@
 import logging
 import azure.functions as func
 import mysql.connector
+import json
 
 config = {
   'host':'duncangrille.mysql.database.azure.com',
@@ -14,6 +15,7 @@ config = {
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
     # Connect to MySQL
+    q = 'select * from orders limit 5'
     try:
         logging.info(req.get_json()['sql'])
         q = req.get_json()['sql']
@@ -29,10 +31,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Build result response text
     result_str_list = []
     for row in result_list:
-        row_str = ', '.join([str(v) for v in row])
-        result_str_list.append(row_str)
-    result_str = '\n'.join(result_str_list)
+        r = []
+        for e in row:
+            r.append(str(e))
+        result_str_list.append(r)
     return func.HttpResponse(
-        result_str,
+        body=json.dumps(result_str_list),
         status_code=200
     )
