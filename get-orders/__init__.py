@@ -16,6 +16,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Connect to MySQL
     try:
         logging.info(req.get_json()['sql'])
+        q = req.get_json()['sql']
     except:
         logging.info("No json data")
     cnx = mysql.connector.connect(**config  
@@ -23,7 +24,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info(cnx)
     # Show databases
     cursor = cnx.cursor()
-    cursor.execute("select * from orders limit 1;")
+    cursor.execute(q)
     result_list = cursor.fetchall()
     # Build result response text
     result_str_list = []
