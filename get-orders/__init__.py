@@ -33,6 +33,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         result_str_list.append(row_str)
     result_str = '\n'.join(result_str_list)
     return func.HttpResponse(
-        result_str,
+        result_list,
         status_code=200
     )
