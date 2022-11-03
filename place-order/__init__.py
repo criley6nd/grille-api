@@ -27,6 +27,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Show databases
     cursor = cnx.cursor()
     cursor.execute(q)
+    cnx.commit()
     result_list = cursor.fetchall()
     # Build result response text
     result_str_list = []
@@ -35,7 +36,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         for e in row:
             r.append(str(e))
         result_str_list.append(r)
-    
     return func.HttpResponse(
         body=json.dumps(result_str_list),
         status_code=200
